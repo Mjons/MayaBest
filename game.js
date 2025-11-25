@@ -259,8 +259,8 @@ function spawnObject() {
         width = 125;
         height = 125;
         speed = gameSpeed;
-    } else if (rng <= 90) {
-        // 5% - Unicorn (faster)
+    } else if (rng <= 97) {
+        // 12% - Unicorn (faster)
         type = 'unicorn';
         width = 120;
         height = 120;
