@@ -73,12 +73,12 @@ let spawnTimer = 0;
 
 // Background scrolling
 let bgX1 = 0;
-let bgX2 = SCREEN_WIDTH * 1.08 - 2; // -2 overlap to prevent gap
+let bgX2 = SCREEN_WIDTH * 1.08 - 5; // -5 overlap to prevent gap
 const bgScrollSpeed = 1.3;
 
 // Foreground scrolling
 let fgX1 = 0;
-let fgX2 = SCREEN_WIDTH * 1.08 - 2; // -2 overlap to prevent gap
+let fgX2 = SCREEN_WIDTH * 1.08 - 5; // -5 overlap to prevent gap
 const fgScrollSpeed = 1.95;
 const fgYOffset = -57; // Position foreground so ground aligns properly
 
@@ -364,14 +364,14 @@ function update() {
     // Update background scrolling
     bgX1 -= bgScrollSpeed;
     bgX2 -= bgScrollSpeed;
-    if (bgX1 <= -SCREEN_WIDTH * 1.08) bgX1 = SCREEN_WIDTH * 1.08 - 2;
-    if (bgX2 <= -SCREEN_WIDTH * 1.08) bgX2 = SCREEN_WIDTH * 1.08 - 2;
+    if (bgX1 <= -SCREEN_WIDTH * 1.08) bgX1 = SCREEN_WIDTH * 1.08 - 5;
+    if (bgX2 <= -SCREEN_WIDTH * 1.08) bgX2 = SCREEN_WIDTH * 1.08 - 5;
 
     // Update foreground scrolling
     fgX1 -= fgScrollSpeed;
     fgX2 -= fgScrollSpeed;
-    if (fgX1 <= -SCREEN_WIDTH * 1.08) fgX1 = SCREEN_WIDTH * 1.08 - 2;
-    if (fgX2 <= -SCREEN_WIDTH * 1.08) fgX2 = SCREEN_WIDTH * 1.08 - 2;
+    if (fgX1 <= -SCREEN_WIDTH * 1.08) fgX1 = SCREEN_WIDTH * 1.08 - 5;
+    if (fgX2 <= -SCREEN_WIDTH * 1.08) fgX2 = SCREEN_WIDTH * 1.08 - 5;
 
     // Update player physics
     player.velocityY += GRAVITY;
@@ -607,10 +607,10 @@ function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Draw background (parallax) - draw slightly wider to prevent gaps
+    // Draw background (parallax) - draw wider to prevent gaps
     if (images.bg.complete) {
-        ctx.drawImage(images.bg, bgX1, -15, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
-        ctx.drawImage(images.bg, bgX2, -15, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.bg, bgX1, -15, SCREEN_WIDTH * 1.08 + 5, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.bg, bgX2, -15, SCREEN_WIDTH * 1.08 + 5, SCREEN_HEIGHT * 1.08);
     } else {
         // Fallback gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, SCREEN_HEIGHT);
@@ -620,10 +620,10 @@ function draw() {
         ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    // Draw foreground (parallax) - draw slightly wider to prevent gaps
+    // Draw foreground (parallax) - draw wider to prevent gaps
     if (images.fg.complete) {
-        ctx.drawImage(images.fg, fgX1, fgYOffset, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
-        ctx.drawImage(images.fg, fgX2, fgYOffset, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.fg, fgX1, fgYOffset, SCREEN_WIDTH * 1.08 + 5, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.fg, fgX2, fgYOffset, SCREEN_WIDTH * 1.08 + 5, SCREEN_HEIGHT * 1.08);
     }
 
     // Draw player (Maya sprite)
@@ -814,9 +814,9 @@ function restartGame() {
     hurtTimer = 0;
     pauseTimer = 0;
     bgX1 = 0;
-    bgX2 = SCREEN_WIDTH * 1.08 - 2;
+    bgX2 = SCREEN_WIDTH * 1.08 - 5;
     fgX1 = 0;
-    fgX2 = SCREEN_WIDTH * 1.08 - 2;
+    fgX2 = SCREEN_WIDTH * 1.08 - 5;
 
     // Restart background music
     if (sounds.music) {
