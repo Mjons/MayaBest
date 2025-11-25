@@ -84,8 +84,9 @@ const fgYOffset = -57; // Position foreground so ground aligns properly
 
 // Asset loading
 let assetsLoaded = 0;
-const totalAssets = 9;
+const totalAssets = 17; // 9 original + 8 additional food sprites
 const images = {};
+const foodImages = []; // Array to hold all food sprite variations
 
 // Audio
 const sounds = {
@@ -147,7 +148,13 @@ function loadAudio(src) {
 images.bg = loadImage('bg', './assets/images/bg.png');
 images.fg = loadImage('fg', './assets/images/fg.png');
 images.maya = loadImage('maya', './assets/images/mayaSprite.png');
-images.food = loadImage('food', './assets/images/sprite_r0_c0.png'); // Using one of the sprite files for food
+// Load all food sprite variations
+for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+        const foodImg = loadImage(`food_r${r}_c${c}`, `./assets/images/sprite_r${r}_c${c}.png`);
+        foodImages.push(foodImg);
+    }
+}
 images.obstacle = loadImage('obstacle', './assets/images/rock.png');
 images.unicorn = loadImage('unicorn', './assets/images/unicorn_processed.png');
 images.elmo = loadImage('elmo', './assets/images/elmo_processed.png');
@@ -285,7 +292,8 @@ function spawnObject() {
         bobOffset: 0,
         bobSpeed: 0.05,
         collected: false, // For pet - track if already collected
-        currentRow: type === 'pet' ? 0 : undefined // Pet starts with sleeping animation (row 0)
+        currentRow: type === 'pet' ? 0 : undefined, // Pet starts with sleeping animation (row 0)
+        foodImageIndex: type === 'food' ? Math.floor(Math.random() * foodImages.length) : undefined // Random food sprite
     });
 }
 
@@ -629,6 +637,18 @@ function draw() {
 
     // Draw objects
     objects.forEach(obj => {
+        // Special handling for food - use random food image
+        if (obj.type === 'food' && obj.foodImageIndex !== undefined) {
+            const foodImg = foodImages[obj.foodImageIndex];
+            if (foodImg && foodImg.complete) {
+                ctx.drawImage(foodImg, obj.x, obj.y, obj.width, obj.height);
+            } else {
+                ctx.fillStyle = '#4ecca3';
+                ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+            }
+            return;
+        }
+
         const imageName = obj.type === 'boss' ? 'elmo' : obj.type;
         const image = images[imageName];
         const config = spriteConfig[imageName];
