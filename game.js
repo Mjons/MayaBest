@@ -38,8 +38,8 @@ window.addEventListener('orientationchange', () => {
     setTimeout(resizeCanvas, 100);
 });
 const GROUND_Y =433; // Adjusted so Maya's feet align with the foreground ground
-const GRAVITY = 0.78;
-const JUMP_STRENGTH = -15.9; // Adjusted for slower game speed
+const GRAVITY = 0.6; // Lower gravity for longer hang time
+const JUMP_STRENGTH = -14; // Adjusted for floatier jump
 
 // Game state
 let gameActive = false;
@@ -500,7 +500,7 @@ function update() {
                 if (player.jumping && player.velocityY > 0 && player.y + player.height <= obj.y + obj.height && obj.hitCooldown === 0) {
                     // Hit boss from top (larger hit zone - full boss height)
                     obj.health--;
-                    obj.hitCooldown = 60; // 1 second cooldown
+                    obj.hitCooldown = 180; // 3 second cooldown
                     player.velocityY = JUMP_STRENGTH * 0.5; // Bounce
 
                     // Change animation row based on hits (3 health -> 2 health -> 1 health)
