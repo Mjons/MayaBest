@@ -73,12 +73,12 @@ let spawnTimer = 0;
 
 // Background scrolling
 let bgX1 = 0;
-let bgX2 = SCREEN_WIDTH * 1.08;
+let bgX2 = SCREEN_WIDTH * 1.08 - 2; // -2 overlap to prevent gap
 const bgScrollSpeed = 1.3;
 
 // Foreground scrolling
 let fgX1 = 0;
-let fgX2 = SCREEN_WIDTH * 1.08;
+let fgX2 = SCREEN_WIDTH * 1.08 - 2; // -2 overlap to prevent gap
 const fgScrollSpeed = 1.95;
 const fgYOffset = -57; // Position foreground so ground aligns properly
 
@@ -348,14 +348,14 @@ function update() {
     // Update background scrolling
     bgX1 -= bgScrollSpeed;
     bgX2 -= bgScrollSpeed;
-    if (bgX1 <= -SCREEN_WIDTH * 1.08) bgX1 = SCREEN_WIDTH * 1.08;
-    if (bgX2 <= -SCREEN_WIDTH * 1.08) bgX2 = SCREEN_WIDTH * 1.08;
+    if (bgX1 <= -SCREEN_WIDTH * 1.08) bgX1 = SCREEN_WIDTH * 1.08 - 2;
+    if (bgX2 <= -SCREEN_WIDTH * 1.08) bgX2 = SCREEN_WIDTH * 1.08 - 2;
 
     // Update foreground scrolling
     fgX1 -= fgScrollSpeed;
     fgX2 -= fgScrollSpeed;
-    if (fgX1 <= -SCREEN_WIDTH * 1.08) fgX1 = SCREEN_WIDTH * 1.08;
-    if (fgX2 <= -SCREEN_WIDTH * 1.08) fgX2 = SCREEN_WIDTH * 1.08;
+    if (fgX1 <= -SCREEN_WIDTH * 1.08) fgX1 = SCREEN_WIDTH * 1.08 - 2;
+    if (fgX2 <= -SCREEN_WIDTH * 1.08) fgX2 = SCREEN_WIDTH * 1.08 - 2;
 
     // Update player physics
     player.velocityY += GRAVITY;
@@ -786,9 +786,9 @@ function restartGame() {
     hurtTimer = 0;
     pauseTimer = 0;
     bgX1 = 0;
-    bgX2 = SCREEN_WIDTH * 1.08;
+    bgX2 = SCREEN_WIDTH * 1.08 - 2;
     fgX1 = 0;
-    fgX2 = SCREEN_WIDTH * 1.08;
+    fgX2 = SCREEN_WIDTH * 1.08 - 2;
 
     // Restart background music
     if (sounds.music) {
