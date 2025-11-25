@@ -477,8 +477,8 @@ function update() {
                 player.currentRow = 5; // Show celebrating animation (row 5)
                 player.frameIndex = 0;
                 hugActive = true;
-                hugTimer = 90; // Show message for 1.5 seconds
-                pauseTimer = 60; // Pause for 1 second to show animation
+                hugTimer = 180; // Show message for 3 seconds
+                pauseTimer = 150; // Pause for 2.5 seconds to show animation multiple times
                 obj.currentRow = 1; // Switch to awake/hug animation (row 1)
                 obj.frameIndex = 0; // Reset animation to start
                 obj.collected = true; // Mark as collected to prevent re-collision
