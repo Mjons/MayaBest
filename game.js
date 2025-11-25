@@ -472,44 +472,44 @@ function update() {
                     sounds.hit.play().catch(e => console.warn('Could not play hit sound'));
                 }
             } else if (obj.type === 'pet' && !obj.collected) {
-                // Check if Maya is bouncing on top of the puppy
+                // Hug mechanic - puppy wakes up and jumps for a hug!
+                player.health = 100; // Full heal
+                player.currentRow = 5; // Show celebrating animation (row 5)
+                player.frameIndex = 0;
+                hugActive = true;
+                hugTimer = 180; // Show message for 3 seconds
+                pauseTimer = 150; // Pause for 2.5 seconds to show animation multiple times
+                obj.currentRow = 1; // Switch to awake/hug animation (row 1)
+                obj.frameIndex = 0; // Reset animation to start
+                obj.collected = true; // Mark as collected to prevent re-collision
+                // Play love sound
+                if (sounds.love) {
+                    sounds.love.currentTime = 0;
+                    sounds.love.play().catch(e => console.warn('Could not play love sound'));
+                }
+            } else if (obj.type === 'unicorn') {
+                // Check if Maya is bouncing on top of the unicorn
                 if (player.jumping && player.velocityY > 0 && player.y + player.height <= obj.y + obj.height * 0.5) {
-                    // Bounce off the puppy - puppy keeps running!
-                    player.velocityY = JUMP_STRENGTH * 0.7; // Bounce up
-                    player.health = Math.min(100, player.health + 10); // Small heal
+                    // Bounce off the unicorn - it keeps running!
+                    player.velocityY = JUMP_STRENGTH * 0.8; // Bounce up high
+                    player.health = Math.min(100, player.health + 5); // Small heal
                     // Play collect sound for bounce
                     if (sounds.collect) {
                         sounds.collect.currentTime = 0;
                         sounds.collect.play().catch(e => console.warn('Could not play collect sound'));
                     }
                 } else {
-                    // Hug mechanic - puppy wakes up and jumps for a hug!
-                    player.health = 100; // Full heal
-                    player.currentRow = 5; // Show celebrating animation (row 5)
+                    // Side collision - take damage
+                    player.health -= 5;
+                    player.currentRow = 6; // Show hurt animation (row 6)
                     player.frameIndex = 0;
-                    hugActive = true;
-                    hugTimer = 180; // Show message for 3 seconds
-                    pauseTimer = 150; // Pause for 2.5 seconds to show animation multiple times
-                    obj.currentRow = 1; // Switch to awake/hug animation (row 1)
-                    obj.frameIndex = 0; // Reset animation to start
-                    obj.collected = true; // Mark as collected to prevent re-collision
-                    // Play love sound
-                    if (sounds.love) {
-                        sounds.love.currentTime = 0;
-                        sounds.love.play().catch(e => console.warn('Could not play love sound'));
+                    hurtTimer = 15; // Show hurt animation briefly
+                    objects.splice(index, 1);
+                    // Play hit sound
+                    if (sounds.hit) {
+                        sounds.hit.currentTime = 0;
+                        sounds.hit.play().catch(e => console.warn('Could not play hit sound'));
                     }
-                }
-            } else if (obj.type === 'unicorn') {
-                // Unicorn collision
-                player.health -= 5;
-                player.currentRow = 6; // Show hurt animation (row 6)
-                player.frameIndex = 0;
-                hurtTimer = 15; // Show hurt animation briefly
-                objects.splice(index, 1);
-                // Play hit sound
-                if (sounds.hit) {
-                    sounds.hit.currentTime = 0;
-                    sounds.hit.play().catch(e => console.warn('Could not play hit sound'));
                 }
             } else if (obj.type === 'elmo') {
                 // Floating Elmo collision
