@@ -241,20 +241,20 @@ function spawnObject() {
     const rng = Math.random() * 100;
     let type, width, height, speed, frameIndex = 0;
 
-    if (rng <= 35) {
-        // 35% - Obstacle
+    if (rng <= 25) {
+        // 25% - Obstacle (rocks)
         type = 'obstacle';
         width = 70;
         height = 70;
         speed = gameSpeed;
-    } else if (rng <= 80) {
-        // 45% - Food
+    } else if (rng <= 65) {
+        // 40% - Food
         type = 'food';
         width = 70;
         height = 70;
         speed = gameSpeed;
     } else if (rng <= 90) {
-        // 10% - Pet (puppy)
+        // 25% - Pet (puppy)
         type = 'pet';
         width = 125;
         height = 125;
