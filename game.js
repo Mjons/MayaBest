@@ -488,10 +488,10 @@ function update() {
                     sounds.love.play().catch(e => console.warn('Could not play love sound'));
                 }
             } else if (obj.type === 'unicorn') {
-                // Check if Maya is bouncing on top of the unicorn
-                if (player.jumping && player.velocityY > 0 && player.y + player.height <= obj.y + obj.height * 0.5) {
+                // Check if Maya is bouncing on top of the unicorn (generous hit zone)
+                if (player.velocityY > 0 && player.y + player.height <= obj.y + obj.height * 0.75) {
                     // Bounce off the unicorn - it keeps running!
-                    player.velocityY = JUMP_STRENGTH * 0.8; // Bounce up high
+                    player.velocityY = JUMP_STRENGTH * 1.0; // Strong bounce
                     player.health = Math.min(100, player.health + 5); // Small heal
                     // Play collect sound for bounce
                     if (sounds.collect) {
