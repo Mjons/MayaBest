@@ -7,6 +7,36 @@ const loadingScreen = document.getElementById('loadingScreen');
 // Game constants
 const SCREEN_WIDTH = 1200;
 const SCREEN_HEIGHT = 720;
+
+// Responsive canvas scaling
+function resizeCanvas() {
+    const gameRatio = SCREEN_WIDTH / SCREEN_HEIGHT;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const windowRatio = windowWidth / windowHeight;
+
+    let newWidth, newHeight;
+
+    if (windowRatio > gameRatio) {
+        // Window is wider than game - fit to height
+        newHeight = windowHeight - 10;
+        newWidth = newHeight * gameRatio;
+    } else {
+        // Window is taller than game - fit to width
+        newWidth = windowWidth - 10;
+        newHeight = newWidth / gameRatio;
+    }
+
+    canvas.style.width = newWidth + 'px';
+    canvas.style.height = newHeight + 'px';
+}
+
+// Call on load and resize
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => {
+    setTimeout(resizeCanvas, 100);
+});
 const GROUND_Y =433; // Adjusted so Maya's feet align with the foreground ground
 const GRAVITY = 0.78;
 const JUMP_STRENGTH = -15.9; // Adjusted for slower game speed

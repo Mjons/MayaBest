@@ -24,27 +24,7 @@
         #gameCanvas {
             border: 2px solid #4ecca3;
             box-shadow: 0 0 20px rgba(78, 204, 163, 0.3);
-            max-width: calc(100vw - 4px);
-            max-height: calc(100vh - 4px);
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-        /* Landscape mode - height is the constraint */
-        @media (orientation: landscape) {
-            #gameCanvas {
-                height: calc(100vh - 4px);
-                width: auto;
-                max-width: calc(100vw - 4px);
-            }
-        }
-        /* Portrait mode - width is the constraint */
-        @media (orientation: portrait) {
-            #gameCanvas {
-                width: calc(100vw - 4px);
-                height: auto;
-                max-height: calc(100vh - 4px);
-            }
+            display: block;
         }
         #loadingScreen {
             position: absolute;
