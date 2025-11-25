@@ -253,13 +253,13 @@ function spawnObject() {
         width = 70;
         height = 70;
         speed = gameSpeed;
-    } else if (rng <= 90) {
-        // 25% - Pet (puppy)
+    } else if (rng <= 85) {
+        // 20% - Pet (puppy)
         type = 'pet';
         width = 125;
         height = 125;
         speed = gameSpeed;
-    } else if (rng <= 95) {
+    } else if (rng <= 90) {
         // 5% - Unicorn (faster)
         type = 'unicorn';
         width = 120;
