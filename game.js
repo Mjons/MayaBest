@@ -8,12 +8,12 @@ const loadingScreen = document.getElementById('loadingScreen');
 const SCREEN_WIDTH = 1200;
 const SCREEN_HEIGHT = 720;
 const GROUND_Y =433; // Adjusted so Maya's feet align with the foreground ground
-const GRAVITY = 1.2;
-const JUMP_STRENGTH = -24.4; // 22% higher jump
+const GRAVITY = 0.78;
+const JUMP_STRENGTH = -15.9; // Adjusted for slower game speed
 
 // Game state
 let gameActive = false;
-let gameSpeed = 5;
+let gameSpeed = 3.25;
 let score = 0;
 let foodCollected = 0;
 let bossActive = false;
@@ -33,7 +33,7 @@ let player = {
     jumping: false,
     health: 100,
     frameIndex: 0,
-    animationSpeed: 0.15,
+    animationSpeed: 0.1,
     currentRow: 1 // Start with walk cycle (row 1)
 };
 
@@ -44,12 +44,12 @@ let spawnTimer = 0;
 // Background scrolling
 let bgX1 = 0;
 let bgX2 = SCREEN_WIDTH * 1.08;
-const bgScrollSpeed = 2;
+const bgScrollSpeed = 1.3;
 
 // Foreground scrolling
 let fgX1 = 0;
 let fgX2 = SCREEN_WIDTH * 1.08;
-const fgScrollSpeed = 3;
+const fgScrollSpeed = 1.95;
 const fgYOffset = -57; // Position foreground so ground aligns properly
 
 // Asset loading
@@ -251,7 +251,7 @@ function spawnObject() {
         height,
         speed,
         frameIndex,
-        animationSpeed: 0.15,
+        animationSpeed: 0.1,
         bobOffset: 0,
         bobSpeed: 0.05,
         collected: false, // For pet - track if already collected
