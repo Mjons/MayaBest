@@ -39,7 +39,7 @@ window.addEventListener('orientationchange', () => {
 });
 const GROUND_Y =433; // Adjusted so Maya's feet align with the foreground ground
 const GRAVITY = 0.6; // Lower gravity for longer hang time
-const JUMP_STRENGTH = -14; // Adjusted for floatier jump
+const JUMP_STRENGTH = -17; // Higher jump (+40 pixels)
 
 // Game state
 let gameActive = false;
@@ -276,7 +276,15 @@ function spawnObject() {
     // Objects should align with Maya's feet (bottom edge)
     let y = GROUND_Y + player.height - height;
     if (type === 'food') {
-        y = GROUND_Y + player.height - height - Math.random() * 100;
+        // Some food at ground level, some mid-air, some high up
+        const heightRoll = Math.random();
+        if (heightRoll < 0.4) {
+            y = GROUND_Y + player.height - height - Math.random() * 50; // Low food
+        } else if (heightRoll < 0.7) {
+            y = GROUND_Y + player.height - height - 80 - Math.random() * 60; // Mid food
+        } else {
+            y = GROUND_Y + player.height - height - 140 - Math.random() * 80; // High food - need to jump!
+        }
     }
     // All other objects (obstacles, pets, unicorns, elmo) spawn at ground level
 
@@ -599,10 +607,10 @@ function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Draw background (parallax)
+    // Draw background (parallax) - draw slightly wider to prevent gaps
     if (images.bg.complete) {
-        ctx.drawImage(images.bg, bgX1, -15, SCREEN_WIDTH * 1.08, SCREEN_HEIGHT * 1.08);
-        ctx.drawImage(images.bg, bgX2, -15, SCREEN_WIDTH * 1.08, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.bg, bgX1, -15, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.bg, bgX2, -15, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
     } else {
         // Fallback gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, SCREEN_HEIGHT);
@@ -612,10 +620,10 @@ function draw() {
         ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    // Draw foreground (parallax)
+    // Draw foreground (parallax) - draw slightly wider to prevent gaps
     if (images.fg.complete) {
-        ctx.drawImage(images.fg, fgX1, fgYOffset, SCREEN_WIDTH * 1.08, SCREEN_HEIGHT * 1.08);
-        ctx.drawImage(images.fg, fgX2, fgYOffset, SCREEN_WIDTH * 1.08, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.fg, fgX1, fgYOffset, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
+        ctx.drawImage(images.fg, fgX2, fgYOffset, SCREEN_WIDTH * 1.08 + 2, SCREEN_HEIGHT * 1.08);
     }
 
     // Draw player (Maya sprite)
