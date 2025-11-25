@@ -52,6 +52,64 @@ let hugActive = false;
 let hugTimer = 0;
 let hurtTimer = 0; // Timer for hurt animation
 let pauseTimer = 0; // Pause game to show animations
+let confetti = []; // Confetti particles for hug celebration
+let hugAnimFrame = 0; // Animation frame for hug text
+
+// Confetti colors - bright and fun for kids!
+const CONFETTI_COLORS = ['#ff69b4', '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#9b59b6', '#ff85a2', '#00d4ff'];
+
+// Spawn confetti burst
+function spawnConfetti(amount) {
+    for (let i = 0; i < amount; i++) {
+        confetti.push({
+            x: SCREEN_WIDTH / 2 + (Math.random() - 0.5) * 300,
+            y: 80 + Math.random() * 50,
+            vx: (Math.random() - 0.5) * 8,
+            vy: Math.random() * -4 - 2,
+            size: Math.random() * 12 + 6,
+            color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 15,
+            shape: Math.random() > 0.5 ? 'rect' : 'circle',
+            gravity: 0.15
+        });
+    }
+}
+
+// Update confetti particles
+function updateConfetti() {
+    for (let i = confetti.length - 1; i >= 0; i--) {
+        const p = confetti[i];
+        p.x += p.vx;
+        p.vy += p.gravity;
+        p.y += p.vy;
+        p.rotation += p.rotationSpeed;
+
+        // Remove if off screen
+        if (p.y > SCREEN_HEIGHT + 50) {
+            confetti.splice(i, 1);
+        }
+    }
+}
+
+// Draw confetti
+function drawConfetti(ctx) {
+    confetti.forEach(p => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+
+        if (p.shape === 'rect') {
+            ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    });
+}
 
 // Player state
 let player = {
@@ -390,13 +448,21 @@ function update() {
         player.frameIndex = 0;
     }
 
-    // Update hug timer
+    // Update hug timer and animation
     if (hugActive) {
         hugTimer--;
+        hugAnimFrame++;
+        // Spawn more confetti periodically
+        if (hugTimer % 20 === 0) {
+            spawnConfetti(10);
+        }
         if (hugTimer <= 0) {
             hugActive = false;
         }
     }
+
+    // Always update confetti (even after hug ends, let them fall)
+    updateConfetti();
 
     // Spawn boss at 5 veggies
     if (foodCollected >= 5 && !bossActive) {
@@ -478,6 +544,8 @@ function update() {
                 player.frameIndex = 0;
                 hugActive = true;
                 hugTimer = 180; // Show message for 3 seconds
+                hugAnimFrame = 0; // Reset animation
+                spawnConfetti(50); // Big confetti burst!
                 pauseTimer = 150; // Pause for 2.5 seconds to show animation multiple times
                 obj.currentRow = 1; // Switch to awake/hug animation (row 1)
                 obj.frameIndex = 0; // Reset animation to start
@@ -747,12 +815,58 @@ function draw() {
     ctx.fillText(`Speed: ${gameSpeed.toFixed(1)}`, 10, 60);
     ctx.fillText(`Veggies: ${foodCollected}`, 10, 90);
 
-    // Draw hug indicator
+    // Draw confetti (behind text)
+    drawConfetti(ctx);
+
+    // Draw fancy animated hug indicator
     if (hugActive) {
-        ctx.fillStyle = '#ff69b4';
-        ctx.font = '32px Arial';
+        ctx.save();
         ctx.textAlign = 'center';
-        ctx.fillText('💕 HUG! 💕', SCREEN_WIDTH / 2, 100);
+
+        // Bouncy scale animation
+        const bounce = 1 + Math.sin(hugAnimFrame * 0.15) * 0.15;
+        const wobble = Math.sin(hugAnimFrame * 0.1) * 3;
+
+        ctx.translate(SCREEN_WIDTH / 2, 100);
+        ctx.rotate(wobble * Math.PI / 180);
+        ctx.scale(bounce, bounce);
+
+        // Rainbow gradient text
+        const gradient = ctx.createLinearGradient(-150, 0, 150, 0);
+        const hueShift = hugAnimFrame * 3;
+        gradient.addColorStop(0, `hsl(${(hueShift) % 360}, 100%, 60%)`);
+        gradient.addColorStop(0.25, `hsl(${(hueShift + 60) % 360}, 100%, 60%)`);
+        gradient.addColorStop(0.5, `hsl(${(hueShift + 120) % 360}, 100%, 60%)`);
+        gradient.addColorStop(0.75, `hsl(${(hueShift + 180) % 360}, 100%, 60%)`);
+        gradient.addColorStop(1, `hsl(${(hueShift + 240) % 360}, 100%, 60%)`);
+
+        // Glow effect (multiple shadows)
+        ctx.shadowColor = '#ff69b4';
+        ctx.shadowBlur = 20 + Math.sin(hugAnimFrame * 0.2) * 10;
+
+        // Big sparkly text
+        ctx.font = 'bold 56px Comic Sans MS, cursive, sans-serif';
+        ctx.fillStyle = gradient;
+        ctx.fillText('HUG!', 0, 0);
+
+        // White outline for pop
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 3;
+        ctx.strokeText('HUG!', 0, 0);
+
+        // Floating hearts around text
+        const heartEmojis = ['💖', '💕', '💗', '💝', '✨', '🌟', '⭐'];
+        for (let i = 0; i < 6; i++) {
+            const angle = (hugAnimFrame * 0.05) + (i * Math.PI / 3);
+            const radius = 80 + Math.sin(hugAnimFrame * 0.1 + i) * 20;
+            const hx = Math.cos(angle) * radius;
+            const hy = Math.sin(angle) * radius * 0.5 - 10;
+            ctx.font = '28px Arial';
+            ctx.shadowBlur = 0;
+            ctx.fillText(heartEmojis[i % heartEmojis.length], hx, hy);
+        }
+
+        ctx.restore();
         ctx.textAlign = 'left';
     }
 
@@ -823,6 +937,8 @@ function restartGame() {
     bossHealth = 3;
     hugActive = false;
     hugTimer = 0;
+    hugAnimFrame = 0;
+    confetti = [];
     hurtTimer = 0;
     pauseTimer = 0;
     bgX1 = 0;
